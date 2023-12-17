@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}{{author.first_name}} {{author.last_name}} - liberteke{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5" style="width: 70%;">
+    <div class="col">
+        <h1 class="text-center">Author Details</h1>
+        <div class="container mt-5" style="max-width: 600px;">
+            <div class="row mb-4">
+                <div class="col">
+                    <p class="mb-2">Name:</p>
+                    <p class="h3">{{ author.first_name }} {{author.last_name }}</p>
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col">
+                    <p class="mb-2">Date of Birth:</p>
+                    <p class="h3">{{ author.date_of_birth | date:'d/m/Y' }}</p>
+                </div>
+                <div class="col">
+                    <p class="mb-2">Date of Death:</p>
+                    <p class="h3">{{ author.date_of_death | date:'d/m/Y' }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-center gap-2">
+            <a href="{% url 'authors:update' pk=author.id %}" class="d-block btn btn-primary btn-lg my-5">Edit</a>
+            <a href="{% url 'authors:all' %}" class="d-block btn btn-danger btn-lg my-5">Back</a>
+        </div>
+    </div>
+
+</div>
+
+{% endblock  %}

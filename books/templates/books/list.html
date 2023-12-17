@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% for book in book_list %}
+    {% for colname in book.column_set.all  %}
+        <p>{{colname}}</p>
+    {% endfor %}
+{% endfor %}
+
+
+<div class="container d-flex mt-5" style="width: 70%;">
+    <div class="col">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="text-center">My Books</h1>
+            <div class="d-flex align-items-center gap-4">
+                <form class="d-flex" role="search" method="get" action="">
+                    {% csrf_token %}
+                    <input class="form-control me-2" type="search" placeholder="Search" name="search" id="search" aria-label="Search" value="{{search_string | default:''}}">
+                    <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+                <a href="{% url 'books:create' %}" class="d-block btn btn-primary my-5">Add New</a>
+                <form action="{% url 'books:export' %}" method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="search" value="{{search_string | default:''}}">
+                    <button type="submit" class="d-block btn btn-success my-5">Export</button>
+                </form>
+            </div>
+        </div>
+        <table class="table table-striped table-hover border rounded-1 mt-5">
+            <caption>List of books in my personal library</caption>
+            <thead>
+                <tr>
+                    <th scope="col">Title</th>
+                    <th class="text-center" scope="col">Year</th>
+                    <th class="text-center" scope="col">Author</th>
+                    <th class="text-center" scope="col">Score</th>
+                    <th class="text-center" scope="col">Genre</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for book in page_obj %}
+                <tr onclick="window.location='{% url 'books:detail' book.id %}'" style="cursor: pointer;">
+                    <td class="ml-5">{{book.title}}</td>
+                    <td class="text-center">{{book.year}}</td>
+                    <td class="text-center">{{book.author.last_name}}, {{book.author.first_name}}</td>
+                    <td class="text-center">{{book.score | floatformat:2}}</td>
+                    <td class="text-center">{{book.genre.name}}</td>
+                    <td><a href="{% url 'books:update' book.id %}">Update</a></td>
+                    <td><a href="{% url 'books:delete' book.id %}">Delete</a></td>
+                </tr>
+            {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock content %}
